@@ -6,11 +6,13 @@ import sys
 
 sys.path.append("path_to_psycopg2_directory")
 
+header_split = chr(1)
+result_split = chr(2)
+
 
 class Execute:
-    def __init__(self, command=None):
+    def __init__(self, command='None'):
         super().__init__()
-        print('[ 실행 : class execute ]')
 
         self.data = DataClass()
 
@@ -18,8 +20,26 @@ class Execute:
             self.select_tb_store()
         elif command == 'req_population_info':
             self.get_tb_dong_population()
-        elif command == 'get_real_estate_info':
-            self.get_real_estate_info()
+        # elif command == 'get_real_estate_info':
+        #     self.get_real_estate_info()
+        elif "page_two_combo1" in command:
+            result = command.split(header_split)[1]
+            self.get_dong_real_estate_info(result)
+        else:
+            pass
+
+    def get_dong_real_estate_info(self, dong_name):
+        col_list = ['ESTATE_ADDR', 'ESTATE_AREA', 'ESTATE_PRICE']
+        dong_estate_info = self.data.select_dong_real_estate_info(dong_name, col_list)
+        list_ = []
+        for i in dong_estate_info:
+            area, price, addr = i
+            a = f'{area}, {price}, {addr}{chr(1)}'
+            list_.append(a)
+            print(f'{area}{result_split}{price}{result_split}{addr}{chr(1)}')
+        # print(dong_estate_info)
+        # print(type(list_))
+        # print(f"\"{list_[0]}\"")
 
     def select_tb_store(self):
         # 상권 데이터 출력
@@ -60,13 +80,14 @@ class Execute:
         print(area_price_dict)
 
     # 매물 정보
-    def get_real_estate_info(self):
-        df_list = self.data.select_real_estate_info()
-        area_price_dict = {}
-        for i in df_list:
-            estate_id, dong_nm, area, price, floor, la, lo, addr = i
-            print(f'{estate_id}, {dong_nm}, {area}, {price}, {floor}, {la}, {lo}, {addr}, {chr(1)}')
-            area_price_dict[i[1]] = estate_id, area, price, floor, la, lo, addr, chr(1)
+    # def get_real_estate_info(self):
+    #     df_list = self.data.select_real_estate_info()
+    #     area_price_dict = {}
+    #     for i in df_list:
+    #         estate_id, dong_nm, area, price, floor, la, lo, addr = i
+    #         print(f'{estate_id}, {dong_nm}, {area}, {price}, {floor}, {la}, {lo}, {addr}{chr(1)}')
+    #         area_price_dict[i[1]] = estate_id, area, price, floor, la, lo, addr, chr(1)
+
         # print(area_price_dict)
         # result = json.dumps(area_price_dict)
         # result = bytes(result, "UTF-8")
@@ -87,7 +108,9 @@ class Execute:
 
 if __name__ == '__main__':
     ex = Execute()
-    # ex.get_tb_dong_population()
+    ex.get_tb_dong_population()
     # ex.get_dong_area_price()
     # ex.select_dong_wash_sales_avg()
-    ex.get_dong_wash_stoer()
+    # ex.get_dong_wash_stoer()
+    # ex.get_dong_real_estate_info("신사동")
+    # ex.select_tb_store()

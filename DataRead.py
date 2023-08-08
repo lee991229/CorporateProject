@@ -24,6 +24,22 @@ class DataClass:
     def end_conn(self):
         self.pgdb.close()
 
+    # 2페이지 테이블 띄울 매물 데이터
+    def select_dong_real_estate_info(self, dongname, col_list):
+        size = len(col_list)
+        sql = "select "
+
+        if size > 1:
+            for col in col_list:
+                if col == col_list[0]:
+                    sql += f'\"{col}\"'
+                else:
+                    sql += f',\"{col}\"'
+
+        sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}'"
+
+        df = pd.read_sql(sql, self.engine)
+        return df.values
     # 행정동 별 입점해 있는 세탁업 수
     def select_wash_stoer_count(self):
         df = pd.read_sql(f"select * from \"TB_WASH_STORE\"", self.engine)
@@ -63,13 +79,28 @@ class DataClass:
         df = pd.read_sql(f"select * from \"TB_DONG\"", self.engine)
         return df.values
 
-    # 매물 정보 반환
-    def select_real_estate_info(self):
-        df = pd.read_sql(
-            f"select \"ESTATE_ID\",\"DONG_NM\",\"ESTATE_AREA\",\"ESTATE_PRICE\",\"ESTATE_FLOOR\",\"ESTATE_LA\",\"ESTATE_LO\",\"ESTATE_ADDR\" from \"TB_REAL_ESTATE\"",
-            self.engine)
-        return df.values
+    # def select_real_estate_info(self):
+    #     df = pd.read_sql(
+    #         f"select \"ESTATE_ID\",\"DONG_NM\",\"ESTATE_AREA\",\"ESTATE_PRICE\",\"ESTATE_FLOOR\",\"ESTATE_LA\",\"ESTATE_LO\",\"ESTATE_ADDR\" from \"TB_REAL_ESTATE\"",
+    #         self.engine)
+    #     return df.values
 
+    # 매물 정보 반환
+    def select_real_estate_info(self, dongname, col_list):
+        size = len(col_list)
+        sql = "select "
+
+        if size > 1:
+            for col in col_list:
+                if col == col_list[0]:
+                    sql += f'\"{col}\"'
+                else:
+                    sql += f',\"{col}\"'
+
+        sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}'"
+
+        df = pd.read_sql(sql, self.engine)
+        return df.values.tolist()
 
 # if __name__ == '__main__':
 #     db = DataClass()
