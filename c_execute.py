@@ -3,7 +3,10 @@ import json
 import psycopg2 as pg
 import pandas as pd
 import sys
+
 sys.path.append("path_to_psycopg2_directory")
+
+
 class Execute:
     def __init__(self, command=None):
         super().__init__()
@@ -78,9 +81,8 @@ class Execute:
             dong_code = i[0]
             dong_name = self.data.select_dongname_by_dongcode(dong_code)
             ws_stoer_count = i[1]
-            wash_stoer_count_dict[dong_name[0][0]] =  ws_stoer_count
+            wash_stoer_count_dict[dong_name[0][0]] = ws_stoer_count
         print(wash_stoer_count_dict)
-
 
 
 if __name__ == '__main__':

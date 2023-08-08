@@ -5,21 +5,12 @@ import psycopg2 as pg
 import pandas as pd
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
-# pd = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/pandas/__init__.py")
-# pg = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/psycopg2/__init__.py")
-# sqlalchemy = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/sqlalchemy/engine/create.py")
-# create_engine = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/sqlalchemy/__init__.py")
-# sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/psycopg2")
 import os
 
 
 class DataClass:
     def __init__(self):
-        # pg = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/psycopg2/__init__.py")
-        # create_engine = sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/sqlalchemy/__init__.py")
-        # sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages/psycopg2")
-        # sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages")
-        print(sys.path)
+        # print(sys.path)
         self.pgdb = pg.connect(
             host='10.10.20.114',
             # host='localhost',
@@ -38,7 +29,6 @@ class DataClass:
         df = pd.read_sql(f"select * from \"TB_WASH_STORE\"", self.engine)
         counted = df['DONG_CODE'].value_counts().reset_index().values.tolist()
         return counted
-
 
     # 상권 데이터 반환
     def select_data(self):
@@ -81,10 +71,10 @@ class DataClass:
         return df.values
 
 
-if __name__ == '__main__':
-    db = DataClass()
-    a = db.select_dong_population()
-    print(a)
+# if __name__ == '__main__':
+#     db = DataClass()
+#     a = db.select_dong_population()
+#     print(a)
 
 # list_1 = []
 # dict_1 = {}
