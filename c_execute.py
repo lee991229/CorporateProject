@@ -1,4 +1,5 @@
 # import json
+# 호현이 코드
 # import Page1Mattest
 # import Page3Mattest
 import Create_map
@@ -11,6 +12,7 @@ class Execute:
     def __init__(self, command=None):
         super().__init__()
         self.data = DataClass()
+        # 호현이 코드
         # self.Page1Mattest = Page1Mattest.Page1Mattest()
         # self.Page3Mattest = Page3Mattest.Page3Mattest()
 
@@ -39,7 +41,7 @@ class Execute:
 
     def get_page_1_mat(self, command):
         result = command.split(header_split)[1]
-        self.Page1Mattest.controls(result)
+        # self.Page1Mattest.controls(result)
 
 
     def get_page_2_map(self, command):
@@ -93,7 +95,7 @@ class Execute:
 
     def get_page_3_mat(self, command):
         result = command.split(header_split)[1]
-        self.Page3Mattest.controls(result)
+        # self.Page3Mattest.controls(result)
 
     def select_tb_store(self):
         # 상권 데이터 출력
@@ -160,7 +162,7 @@ class Execute:
         html_script_2 = Create_map.complete_html_(html_script_1)
         url = Create_map.save_html_(html_script_2, 'kakao_map_radius.html')
 
-        # url이 추가 되었습니다.
+        # print() : url이 추가 되었습니다.
         print(result1[0][0], header_split, result1[0][1], header_split, result2[0][0], header_split, dong_name,
               header_split, dong_code, header_split, url)
 
