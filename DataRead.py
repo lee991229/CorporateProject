@@ -83,21 +83,21 @@ class DataClass:
         df = pd.read_sql(f"select * from \"TB_DONG\"", self.engine)
         return df.values
 
-    # def select_dong_real_estate_info2(self, dongname, esrare_type, col_list):
-    #     size = len(col_list)
-    #     sql = "select "
-    #
-    #     if size > 1:
-    #         for col in col_list:
-    #             if col == col_list[0]:
-    #                 sql += f'\"{col}\"'
-    #             else:
-    #                 sql += f',\"{col}\"'
-    #
-    #     sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}' and \"ESTATE_TYPE\" = '{esrare_type}'"
-    #
-    #     df = pd.read_sql(sql, self.engine)
-    #     return df.values
+    def select_dong_real_estate_info2(self, dongname, esrare_type, col_list):
+        size = len(col_list)
+        sql = "select "
+
+        if size > 1:
+            for col in col_list:
+                if col == col_list[0]:
+                    sql += f'\"{col}\"'
+                else:
+                    sql += f',\"{col}\"'
+
+        sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}' and \"ESTATE_TYPE\" = '{esrare_type}'"
+
+        df = pd.read_sql(sql, self.engine)
+        return df.values
 
     # 2페이지 테이블 띄울 매물 데이터
     def select_dong_real_estate_info(self, dongname, col_list):
