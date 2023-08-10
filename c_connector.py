@@ -34,10 +34,15 @@ class Connector:
             obj_execute("get_real_estate_info")
 
         elif 'page_two_combo1' in input_string:
+            # print(input_string)
             obj_execute(input_string)
-
+        elif 'page_two_combo2' in input_string:
+            # print(input_string)
+            obj_execute(input_string)
+        elif "page_two_estate_click" in input_string:
+            obj_execute(input_string)
         else:
-            print('not entered')
+            print(input_string)
 
 
 if __name__ == '__main__':
