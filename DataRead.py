@@ -100,7 +100,7 @@ class DataClass:
         return df.values
 
     # 2페이지 테이블 띄울 매물 데이터
-    def select_dong_real_estate_info(self, dongname, col_list, type):
+    def select_dong_real_estate_info(self, dongname, col_list, type:''):
         size = len(col_list)
         sql = "select "
 
@@ -119,6 +119,7 @@ class DataClass:
 
         df = pd.read_sql(sql, self.engine)
         return df.values.tolist()
+
     def select_dong_real_estate_info1_1(self, dongname, col_list):
         size = len(col_list)
         sql = "select "
@@ -188,7 +189,6 @@ class DataClass:
                 'price': price,
                 'floor': floor,
             })
-
         return custom_dict
 
     # 매물 주변 반경 500m 상권정보 -> 마커를 위한 custom_dict반환 (고주양 추가)

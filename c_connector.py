@@ -13,7 +13,8 @@ class Connector:
         super().__init__()
 
         input_string = input()
-        # input_string = f"page_two_estate_click{header_split}서울특별시 관악구 시흥대로 560^조원동"
+        # input_string = f"page_2{header_split}서울특별시 관악구 보라매동{chr(2)}모두보기"
+        # input_string = f"page_2{header_split}신사동{chr(2)}모두보기"
         self.check_header(input_string)
 
     def check_header(self, input_string):

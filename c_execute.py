@@ -62,7 +62,6 @@ class Execute:
 
             result = command.split(header_split)[1]
             result = result.split("^")
-            print(result)
             self.get_estate_info(result)
         else:
             pass
@@ -72,6 +71,7 @@ class Execute:
         self.Page1Mattest.controls(result)
 
     def get_page_2_map(self, command):
+        # print(command)
         if 'start' in command:
             url = Create_map.open_html_()
             print(url)
@@ -79,9 +79,10 @@ class Execute:
             # C#의 첫번째 콤보박스 행정동입니다.
             result_all = command.split(header_split)[1]
             data_all = result_all.split(result_split)
-            dong_nm = data_all[0]
+            dong_address = data_all[0]
+            dong_addr = dong_address.split(" ")
+            dong_nm = dong_addr[2]
             if len(data_all) < 2:
-                dong_address = "서울시 관악구 %s" % dong_nm  # "서울시 관악구 청룡동"
                 # 행정동명으로 행정동 코드 반환
                 dong_code = self.data.select_dong_code(dong_nm)
                 # 행정동 코드로 세탁업체 정보 반환
@@ -97,13 +98,12 @@ class Execute:
                 url = Create_map.save_html_(html_complete, file_name)
                 print(url)
             elif len(data_all) == 2:
-                dong_address = "서울시 관악구 %s" % (dong_nm)  # "서울시 관악구 청룡동"
-                type = data_all[1][-2:]  # 10평 '이하'
+                type = data_all[1][-2:] # 10평 '이하'
                 # 행정동 매물 정보 반환
                 col_list = ['ESTATE_TYPE', 'ESTATE_LA', 'ESTATE_LO', 'ESTATE_AREA', 'ESTATE_PRICE', 'ESTATE_FLOOR']
                 dong_estate_info = self.data.select_dong_real_estate_info(dong_nm, col_list, type)
                 # 마커 생성을 위한 자료형으로 변환
-                custom_dict = self.data.create_custom_dict('estatePositions', dong_estate_info.tolist())
+                custom_dict = self.data.create_custom_dict('estatePositions', dong_estate_info)
                 # 행정동명으로 행정동 코드 반환
                 dong_code = self.data.select_dong_code(dong_nm)
                 # 행정동 코드로 세탁업체 정보 반환

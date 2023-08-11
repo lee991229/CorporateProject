@@ -60,7 +60,7 @@ def wash_store_marker(address_latlng, wash_list: list, zoomlevel):
     result = result + "    </style>" + "\n"
     result = result + "</head>" + "\n"
     result = result + "<body>" + "\n"
-    result = result + "<div id='map' style='width:800px;height:600px;display:inline-block;'></div>" + "\n"
+    result = result + "<div id='map' style='width:800px;height:300px;display:inline-block;'></div>" + "\n"
     result = result + "<div id='roadview' style='width:800px;height:300px;display:inline;'></div>" + "\n"
     result = result + "<script type='text/javascript' src='//dapi.kakao.com/v2/maps/sdk.js?appkey=" + javascript_key + "&libraries=services,drawing,clusterer'></script>" + "\n"
     result = result + "<script>" + "\n"
@@ -123,7 +123,7 @@ def create_estate_cluster(estate_dict: dict, result):
     result = result + "    var clusterer = new kakao.maps.MarkerClusterer({" + "\n"
     result = result + "        map: map," + "\n"
     result = result + "        averageCenter: true," + "\n"
-    result = result + "        minLevel: 2," + "\n"
+    result = result + "        minLevel: 2" + "\n"
     result = result + "    });" + "\n"
 
     result = result + "    var estateMarkers = [];" + "\n"
@@ -185,7 +185,6 @@ def create_estate_cluster(estate_dict: dict, result):
     result = result + "    var roadviewContainer = document.getElementById('roadview'); " + "\n"
     result = result + "    var roadview = new kakao.maps.Roadview(roadviewContainer);" + "\n"
     result = result + "    var roadviewClient = new kakao.maps.RoadviewClient(); " + "\n"
-    result = result + "    var roadview = new kakao.maps.Panorama(container, options); " + "\n"
 
     result = result + "    function Roadview (lat, lng){" + "\n"
     result = result + "      var position = new kakao.maps.LatLng(lat, lng);" + "\n"
@@ -215,9 +214,9 @@ def create_radius_html(latlng: list, store_dict: dict):
         .custom_typecontrol .selected_btn {color:#fff;background:#425470;background:linear-gradient(#425470, #5b6d8a);}
         .custom_typecontrol .selected_btn:hover {color:#fff;}
         .title {font-weight:bold;display:block;font-size:14px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
-        .hAddr {position:absolute;right:10px;bottom:450px;width:375px;border-radius: 2px;background:rgba(255,255,255,255);z-index:10;padding:5px;}
+        .hAddr {position:absolute;right:10px;bottom:20px;width:374px;border-radius: 2px;background:rgba(255,255,255,255);z-index:10;padding:5px;}
         #centerAddr {display:block;margin-top:2px;font-weight: normal;}
-        .bAddr .title {position:absolute;right:-5px;bottom:310px;border-radius: 2px;z-index:1;width:400px;height:136px;background: url('https://ifh.cc/g/9lsq57.png') no-repeat;margin-bottom:8px;}
+        .bAddr .title {position:absolute;right:-6px;bottom:10px;border-radius: 2px;z-index:1;width:400px;height:136px;background: url('https://ifh.cc/g/9lsq57.png') no-repeat;margin-bottom:8px;}
         #centerBAddr {display:block;margin-top:2px;font-weight: normal;}
     </style>
 </head>
