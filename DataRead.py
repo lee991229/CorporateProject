@@ -1,8 +1,7 @@
 import sys
-
-import geopy
-
 sys.path.append("C:/Users/KDT114/Desktop/CorporateProject/venv/Lib/site-packages")
+
+import geopy.distance
 import psycopg2 as pg
 import pandas as pd
 from datetime import datetime, timedelta
@@ -25,6 +24,7 @@ class DataClass:
 
     def end_conn(self):
         self.pgdb.close()
+
     # 동 코드로 상권 변화지표 반환
     def select_dong_sign(self, dong_code):
         df = pd.read_sql(f"select \"DONG_SIGN\" from \"TB_DONG\" where \"DONG_CODE\" = {dong_code}", self.engine)
@@ -100,7 +100,7 @@ class DataClass:
         return df.values
 
     # 2페이지 테이블 띄울 매물 데이터
-    def select_dong_real_estate_info(self, dongname, col_list):
+    def select_dong_real_estate_info(self, dongname, col_list, type):
         size = len(col_list)
         sql = "select "
 
@@ -112,8 +112,39 @@ class DataClass:
                     sql += f',\"{col}\"'
 
         sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}'"
+        if type == '보기':
+            pass
+        else:
+            sql += f"and \"ESTATE_TYPE\" = '{type}'"
 
         df = pd.read_sql(sql, self.engine)
+        return df.values.tolist()
+    def select_dong_real_estate_info1_1(self, dongname, col_list):
+        size = len(col_list)
+        sql = "select "
+
+        if size > 1:
+            for col in col_list:
+                if col == col_list[0]:
+                    sql += f'\"{col}\"'
+                else:
+                    sql += f',\"{col}\"'
+
+        sql += f" from \"TB_REAL_ESTATE\" where \"DONG_NM\" = '{dongname}'"
+        df = pd.read_sql(sql, self.engine)
+        return df.values
+
+
+    # 인구 상세정보
+    def select_people_detail(self, dongcode):
+        df = pd.read_sql(f"select * from \"TB_PEOPLE_DETAIL\" where \"DONG_CODE\" = {dongcode}", self.engine)
+        return df.values
+
+    # 평균 영업기간, 증감률
+    def select_wash_change(self):
+        df = pd.read_sql(
+            f"select \"DONG_NAME\",\"DONG_AVG_PERIOD\",\"CHANGE_RATE\" from \"TB_WASH_CHANGE\"",
+            self.engine)
         return df.values
 
     # 매물 주소로 정보 반환 (고주양 추가)
@@ -132,7 +163,8 @@ class DataClass:
 
         df = pd.read_sql(sql, self.engine)
         df = df.drop_duplicates(subset=['ESTATE_LA', 'ESTATE_LO'])
-        return df.values
+        print(df)
+        return df.values.tolist()
 
     # 지도 마커 생성을 위한 dict자료형 만들기 (고주양 추가)
     def create_custom_dict(self, dict_nm, origin_list):
@@ -161,11 +193,14 @@ class DataClass:
 
     # 매물 주변 반경 500m 상권정보 -> 마커를 위한 custom_dict반환 (고주양 추가)
     def calculate_distance(self, lat_lon):
+        latlng = lat_lon[0]
+
         store_df = pd.read_sql(f"select \"STORE_APART\",\"STORE_LO\",\"STORE_LA\" from \"TB_STORE\"", self.engine)
         data = []
 
         for i, row in store_df.iterrows():
-            distance = geopy.distance.distance(lat_lon, (store_df.STORE_LO[i], store_df.STORE_LA[i])).km * 1000
+            distance = geopy.distance.distance((latlng[0], latlng[1]),
+                                               (store_df.STORE_LO[i], store_df.STORE_LA[i])).km * 1000
             if distance <= 500.000000:
                 data.append(
                     [store_df.STORE_APART[i], distance, store_df.STORE_LO[i], store_df.STORE_LA[i]])
@@ -193,17 +228,17 @@ class DataClass:
             })
 
         return custom_dict
-        return df.values.tolist()
+        # return df.values.tolist()
     # 인구 상세정보
-    def select_people_detail(self, dongcode):
-        df = pd.read_sql(f"select * from \"TB_PEOPLE_DETAIL\" where \"DONG_CODE\" = {dongcode}", self.engine)
-        return df.values
-    # 평균 영업기간, 증감률
-    def select_wash_change(self):
-        df = pd.read_sql(
-            f"select \"DONG_NAME\",\"DONG_AVG_PERIOD\",\"CHANGE_RATE\" from \"TB_WASH_CHANGE\"",
-            self.engine)
-        return df.values
+    # def select_people_detail(self, dongcode):
+    #     df = pd.read_sql(f"select * from \"TB_PEOPLE_DETAIL\" where \"DONG_CODE\" = {dongcode}", self.engine)
+    #     return df.values
+    # # 평균 영업기간, 증감률
+    # def select_wash_change(self):
+    #     df = pd.read_sql(
+    #         f"select \"DONG_NAME\",\"DONG_AVG_PERIOD\",\"CHANGE_RATE\" from \"TB_WASH_CHANGE\"",
+    #         self.engine)
+    #     return df.values
 
 # if __name__ == '__main__':
 #     db = DataClass()

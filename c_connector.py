@@ -4,16 +4,20 @@ from c_execute import *
 def obj_execute(command):
     Execute(command)
 
+
 header_split = chr(1)
+
 
 class Connector:
     def __init__(self):
         super().__init__()
 
         input_string = input()
+        # input_string = f"page_two_estate_click{header_split}서울특별시 관악구 시흥대로 560^조원동"
         self.check_header(input_string)
 
     def check_header(self, input_string):
+        # print(input_string)
         obj_execute(input_string)
 
         # if input_string == 'req_store_info':
@@ -36,4 +40,5 @@ class Connector:
 
 
 if __name__ == '__main__':
+
     Connector()

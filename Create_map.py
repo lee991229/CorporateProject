@@ -107,6 +107,8 @@ def wash_store_marker(address_latlng, wash_list: list, zoomlevel):
     result = result + "        var customOverlay = new kakao.maps.CustomOverlay({" + "\n"
     result = result + "           position : Position," + "\n"
     result = result + "           content : Content," + "\n"
+    result = result + "           xAnchor: 0.5," + "\n"
+    result = result + "           yAnchor: 2.5" + "\n"
     result = result + "        }); " + "\n"
     result = result + "        customOverlay.setMap(map); " + "\n"
     result = result + "    }; " + "\n"
@@ -361,12 +363,12 @@ def complete_html_(result):
     return result
 
 
-# C:\Users\KDT000\Desktop\ 경로 알맞게 수정 바람
+# C:\Users\KDT111\Desktop\ 경로 알맞게 수정 바람
 def save_html_(map_html, file_name):
-    with open(r"C:\Users\KDT000\Desktop\CorporateProject\HTML" + "\\" + file_name, 'w', encoding="utf-8") as f:
+    with open(r"C:\Users\KDT114\Desktop\CorporateProject\HTML" + "\\" + file_name, 'w', encoding="utf-8") as f:
         f.write(map_html)
 
-    url = f'http://localhost:63342/CorporateProject/HTML{file_name}'
+    url = f'http://localhost:63342/CorporateProject/HTML/{file_name}'
     return url
 
 if __name__ == "__main__":
