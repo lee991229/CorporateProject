@@ -144,8 +144,10 @@ class DataClass:
     # 평균 영업기간, 증감률
     def select_wash_change(self):
         df = pd.read_sql(
-            f"select \"DONG_NAME\",\"DONG_AVG_PERIOD\",\"CHANGE_RATE\" from \"TB_WASH_CHANGE\"",
+            f"select \"DONG_NAME\",\"FIRST_HALF_22\",\"SECOND_HALF_22\" from \"TB_WASH_CHANGE\"",
             self.engine)
+        # f"select \"DONG_NAME\",\"DONG_AVG_PERIOD\",\"CHANGE_RATE\" from \"TB_WASH_CHANGE\"",
+        # self.engine)
         return df.values
 
     # 매물 주소로 정보 반환 (고주양 추가)
@@ -164,7 +166,6 @@ class DataClass:
 
         df = pd.read_sql(sql, self.engine)
         df = df.drop_duplicates(subset=['ESTATE_LA', 'ESTATE_LO'])
-        print(df)
         return df.values.tolist()
 
     # 지도 마커 생성을 위한 dict자료형 만들기 (고주양 추가)

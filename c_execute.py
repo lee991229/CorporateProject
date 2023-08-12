@@ -122,11 +122,18 @@ class Execute:
                 print(url)
 
     def get_page_3_mat(self, command):
+        count = 0
         if "map" in command:
             print("map을 타세용")
         else:
             result = command.split(header_split)[1]
+            # result = result.split(chr(3))
             self.Page3Mattest.controls(result)
+            # for i in result:
+            #     result = i.split(result_split)
+            #     if count > 2:
+            #         count += 1
+            #         print(result_split)
 
     # 매물 확인 화면 1콤보박스 체인지 인덱스
     def get_dong_real_estate_info(self, dong_name):
@@ -234,12 +241,12 @@ class Execute:
 
     def get_estate_info(self, result):
         addr, dong_name = result
-        print(addr, dong_name)
+        # print(addr, dong_name)
         col_list = ['ESTATE_LA', 'ESTATE_LO']
         result1 = self.data.select_estate_info(addr, col_list)
         dong_code = self.data.select_dong_code(dong_name)
         result2 = self.data.select_dong_sign(dong_code)
-        print(result1)
+        # print(result1)
         radius_dict = self.data.calculate_distance(result1)
         html_script_1 = Create_map.create_radius_html(result1[0], radius_dict)
         html_script_2 = Create_map.complete_html_(html_script_1)
