@@ -5,7 +5,7 @@ import numpy as np
 import geopy.distance
 from sklearn.preprocessing import MinMaxScaler
 
-class AnalyzeDate:
+class AnalyzeData:
     def __init__(self):
         # print(sys.path)
         self.pgdb = pg.connect(
@@ -145,5 +145,5 @@ class AnalyzeDate:
         df.to_csv('output_rival.csv', index=False)
 
 
-if __name__ == '__main__':
-    Analyze = AnalyzeDate()
+# if __name__ == '__main__':
+    # Analyze = AnalyzeData()
