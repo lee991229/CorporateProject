@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+    <style>
+    .wrap {position: absolute;left: 0;bottom: 40px;width: 200px;height: 100px;margin-left: -100px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Noto Sans KR', sans-serif;line-height: 1.5;}
+    .wrap * {padding: 0;margin: 0;}
+    .wrap .info {width: 180px;height: 70px;border-radius: 5px;overflow: hidden;background: #fff;border: 0;box-shadow: 0 1px 2px #888;}
+    .info .info-content {padding: 10px 0 0 5px;height: 5px;background: #fff;border-bottom: 1px solid #fff;font-size: 12px;font-weight: normal;}
+    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+    .info .close:hover {cursor: pointer;}
+    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+    </style>
+</head>
+<body>
+<div id='map' style='width:800px;height:300px;display:inline-block;'></div>
+<div id='roadview' style='width:800px;height:300px;display:inline;'></div>
+<script type='text/javascript' src='//dapi.kakao.com/v2/maps/sdk.js?appkey=4f4f0002f704a308f73391878f370e5f&libraries=services,drawing,clusterer'></script>
+<script>
+    var container = document.getElementById('map'); 
+    var options = {
+           center: new kakao.maps.LatLng(37.4881513476023, 126.932785628692),
+           level:5
+    }; 
+    var map = new kakao.maps.Map(container, options); 
+    var positions =[['셀프 빨래방', 37.4911685, 126.9250567], ['셀프 빨래방', 37.48692774, 126.9393649], ['셀프 빨래방', 37.48858673, 126.9304875], ['셀프 빨래방', 37.48740649, 126.9354909], ['세탁소', 37.48826566, 126.931849], ['세탁소', 37.48803394, 126.9361266], ['세탁소', 37.49062601, 126.9298138], ['세탁소', 37.48692773, 126.9363571], ['세탁소', 37.49479566, 126.9275831], ['세탁소', 37.49025898, 126.9310743], ['세탁소', 37.48904662, 126.9305261], ['세탁소', 37.48865727, 126.9303168], ['세탁소', 37.4898598, 126.9287844]];
+    var markerPosition  = new kakao.maps.LatLng(37.4881513476023, 126.932785628692);  
+    var marker = new kakao.maps.Marker({position: markerPosition}); 
+    marker.setMap(map); 
+    var imageSrc_self = 'https://ifh.cc/g/VBcQrN.png';
+    var imageSrc_ = 'https://ifh.cc/g/7sq2oA.png';
+    for (var i = 0; i < positions.length; i ++) {
+        var position = new kakao.maps.LatLng(positions[i][1], positions[i][2]);
+        var imageSize = new kakao.maps.Size(40, 40);
+        var markerImage_self = new kakao.maps.MarkerImage(imageSrc_self, imageSize);
+        var markerImage_ = new kakao.maps.MarkerImage(imageSrc_, imageSize);
+        var imageToUse = markerImage_self;
+        if (positions[i][0] === '세탁소') {
+            imageToUse = markerImage_;
+        }
+        var marker = new kakao.maps.Marker({
+           map: map,
+           position: position,
+           title : positions[i][0],
+           image : imageToUse
+        }); 
+        var Content = '<div class ="label" style="padding: 2px; background-color: #FFF; color: black; font-size: 14px; border: 1px solid #8BE8E5; border-radius:10px;">' + positions[i][0] + '</div>';
+        var Position = new kakao.maps.LatLng(positions[i][1], positions[i][2]);
+        var customOverlay = new kakao.maps.CustomOverlay({
+           position : Position,
+           content : Content,
+           xAnchor: 0.5,
+           yAnchor: 2.5
+        }); 
+        customOverlay.setMap(map); 
+    }; 
+    var clusterer = new kakao.maps.MarkerClusterer({
+        map: map,
+        averageCenter: true,
+        minLevel: 2
+    });
+    var estateMarkers = [];
+    var estatePositions =[{'lat': 37.486912, 'lng': 126.938434, 'type': '이하', 'area': '23/23.14㎡', 'price': '1,000/55', 'floor': '1/2층'}, {'lat': 37.486954, 'lng': 126.939383, 'type': '이하', 'area': '27/27.41㎡', 'price': '1,800/80', 'floor': '1/2층'}, {'lat': 37.486931, 'lng': 126.938734, 'type': '이하', 'area': '33/33.06㎡', 'price': '2,000/84', 'floor': '1/5층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '26/26.4㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486533, 'lng': 126.937988, 'type': '이하', 'area': '33/33.1㎡', 'price': '1,000/70', 'floor': '1/3층'}, {'lat': 37.486533, 'lng': 126.937988, 'type': '이하', 'area': '33/33.05㎡', 'price': '1,000/70', 'floor': '1/3층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '32/26.4㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486533, 'lng': 126.937988, 'type': '이하', 'area': '33/33㎡', 'price': '1,000/70', 'floor': '1/3층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '17/17.48㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '30/30㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486533, 'lng': 126.937988, 'type': '이상', 'area': '35/35㎡', 'price': '1,000/70', 'floor': '1/3층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '29/26.44㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486788, 'lng': 126.938004, 'type': '이하', 'area': '26/26.45㎡', 'price': '1,000/75', 'floor': '1/4층'}, {'lat': 37.486449, 'lng': 126.937707, 'type': '이하', 'area': '33/33.43㎡', 'price': '2,000/150', 'floor': '1/3층'}, {'lat': 37.486449, 'lng': 126.937707, 'type': '이하', 'area': '33/33㎡', 'price': '2,000/150', 'floor': '1/3층'}, {'lat': 37.486466, 'lng': 126.938273, 'type': '이상', 'area': '39/39.6㎡', 'price': '5,000/210', 'floor': '1/7층'}, {'lat': 37.486983, 'lng': 126.937708, 'type': '이하', 'area': '19/19.83㎡', 'price': '500/45', 'floor': '1/3층'}, {'lat': 37.48756, 'lng': 126.935584, 'type': '이상', 'area': '50/50.9㎡', 'price': '1,000/95', 'floor': '1/3층'}, {'lat': 37.48756, 'lng': 126.935584, 'type': '이상', 'area': '46/46.28㎡', 'price': '1,000/100', 'floor': '1/3층'}, {'lat': 37.486921, 'lng': 126.935142, 'type': '이하', 'area': '23/23.1㎡', 'price': '1,000/40', 'floor': '1/4층'}, {'lat': 37.48756, 'lng': 126.935584, 'type': '이상', 'area': '50/47㎡', 'price': '1,000/70', 'floor': '1/3층'}, {'lat': 37.486582, 'lng': 126.936127, 'type': '이상', 'area': '36/36.36㎡', 'price': '2,000/100', 'floor': '1/4층'}, {'lat': 37.486582, 'lng': 126.936127, 'type': '이상', 'area': '39/39.67㎡', 'price': '2,000/100', 'floor': '1/4층'}, {'lat': 37.486747, 'lng': 126.935016, 'type': '이상', 'area': '50/50㎡', 'price': '5,000/120', 'floor': '1/3층'}, {'lat': 37.486921, 'lng': 126.935142, 'type': '이하', 'area': '23/23.1㎡', 'price': '500/45', 'floor': '1/4층'}, {'lat': 37.491151, 'lng': 126.925099, 'type': '이하', 'area': '19/7.83㎡', 'price': '1,000/90', 'floor': '1/23층'}, {'lat': 37.494085, 'lng': 126.928169, 'type': '이하', 'area': '33/33㎡', 'price': '1,000/150', 'floor': '1/3층'}, {'lat': 37.494085, 'lng': 126.928169, 'type': '이하', 'area': '17/17㎡', 'price': '500/50', 'floor': '1/3층'}, {'lat': 37.490385, 'lng': 126.926029, 'type': '이상', 'area': '42/37.5㎡', 'price': '3,500/153', 'floor': '1/5층'}, {'lat': 37.491257, 'lng': 126.926407, 'type': '이상', 'area': '63/45.49㎡', 'price': '8,000/300', 'floor': '1/5층'}, {'lat': 37.491245, 'lng': 126.928392, 'type': '이상', 'area': '39/33.06㎡', 'price': '4,000/170', 'floor': '1/4층'}, {'lat': 37.491245, 'lng': 126.928392, 'type': '이상', 'area': '62/49.5㎡', 'price': '4,000/170', 'floor': '1/4층'}, {'lat': 37.491245, 'lng': 126.928392, 'type': '이상', 'area': '44/44.28㎡', 'price': '4,000/170', 'floor': '1/4층'}, {'lat': 37.491245, 'lng': 126.928392, 'type': '이상', 'area': '49/49.5㎡', 'price': '5,000/180', 'floor': '1/4층'}, {'lat': 37.490704, 'lng': 126.929943, 'type': '이하', 'area': '26/26.4㎡', 'price': '500/50', 'floor': '1/3층'}, {'lat': 37.490704, 'lng': 126.929943, 'type': '이하', 'area': '33/26.45㎡', 'price': '500/50', 'floor': '1/3층'}, {'lat': 37.490034, 'lng': 126.927109, 'type': '이상', 'area': '65/45.41㎡', 'price': '1억/320', 'floor': '1/7층'}, {'lat': 37.490034, 'lng': 126.927109, 'type': '이상', 'area': '47/28.12㎡', 'price': '3,000/165', 'floor': '1/7층'}, {'lat': 37.490034, 'lng': 126.927109, 'type': '이하', 'area': '28/28.12㎡', 'price': '3,000/180', 'floor': '1/7층'}, {'lat': 37.490152, 'lng': 126.927354, 'type': '이상', 'area': '35/35㎡', 'price': '3,500/170', 'floor': '1/3층'}, {'lat': 37.490152, 'lng': 126.927354, 'type': '이하', 'area': '33/33㎡', 'price': '3,500/170', 'floor': '1/3층'}, {'lat': 37.489054, 'lng': 126.929498, 'type': '이하', 'area': '20/20.4㎡', 'price': '1,000/80', 'floor': '1/2층'}, {'lat': 37.489054, 'lng': 126.929498, 'type': '이하', 'area': '20/19㎡', 'price': '1,000/80', 'floor': '1/2층'}, {'lat': 37.489054, 'lng': 126.929498, 'type': '이하', 'area': '20/20㎡', 'price': '1,000/80', 'floor': '1/2층'}, {'lat': 37.489492, 'lng': 126.928959, 'type': '이하', 'area': '29/26.45㎡', 'price': '1,500/120', 'floor': '1/3층'}, {'lat': 37.48957, 'lng': 126.928766, 'type': '이상', 'area': '39/39㎡', 'price': '2,000/100', 'floor': '1/3층'}, {'lat': 37.489036, 'lng': 126.929594, 'type': '이상', 'area': '40/39㎡', 'price': '3,000/80', 'floor': '1/3층'}, {'lat': 37.489396, 'lng': 126.930451, 'type': '이하', 'area': '17/17.16㎡', 'price': '2,000/100', 'floor': '1/4층'}, {'lat': 37.489396, 'lng': 126.930451, 'type': '이하', 'area': '28/28㎡', 'price': '2,000/100', 'floor': '1/6층'}];
+    var img_under = 'https://ifh.cc/g/MaHNZd.png';
+    var img_over = 'https://ifh.cc/g/ZmXBso.png';
+    var imgSize = new kakao.maps.Size(40, 40);
+    var markerImg_under = new kakao.maps.MarkerImage(img_under, imgSize);
+    var markerImg_over = new kakao.maps.MarkerImage(img_over, imgSize);
+    var imgDefault = markerImg_under;
+    for (var i = 0; i < estatePositions.length; i ++) {
+        (function(index) {
+            if (estatePositions[i].type === '이상') {
+                imgDefault = markerImg_over;
+            }
+            var estateMarker = new kakao.maps.Marker({
+                 position: new kakao.maps.LatLng(estatePositions[i].lat, estatePositions[i].lng),
+                 map : map,
+                 image : imgDefault
+            });
+            var content = '<div class="wrap">' +
+                    '    <div class="info">' +
+                    '     <div class="info-content">' +
+                    '         <p>면적 : ' + estatePositions[i].area + '</p>' +
+                    '         <p>층수 : ' + estatePositions[i].floor + '</p>' +
+                    '         <p>매매가 : ' + estatePositions[i].price + '</p>' +
+                    '     </div>' +
+                    '    </div>' +
+                    '</div>';
+            var overlay = new kakao.maps.CustomOverlay({
+                 position : new kakao.maps.LatLng(estatePositions[i].lat, estatePositions[i].lng),
+                 content : content,
+                 xAnchor: 0.5,
+                 yAnchor: 0.5
+            });
+            kakao.maps.event.addListener(estateMarker, 'click', function() {
+                 Roadview (estatePositions[index].lat, estatePositions[index].lng);
+            });
+            kakao.maps.event.addListener(estateMarker, 'mouseover', function() {
+                 overlay.setMap(map);
+            });
+            kakao.maps.event.addListener(estateMarker, 'mouseout', function() {
+                 overlay.setMap(null);
+            });
+            estateMarkers.push(estateMarker);
+        })(i);
+    }
+    clusterer.addMarkers(estateMarkers); 
+    var roadviewContainer = document.getElementById('roadview'); 
+    var roadview = new kakao.maps.Roadview(roadviewContainer);
+    var roadviewClient = new kakao.maps.RoadviewClient(); 
+    function Roadview (lat, lng){
+      var position = new kakao.maps.LatLng(lat, lng);
+      roadviewClient.getNearestPanoId(position, 50, function(panoId) {
+          roadview.setPanoId(panoId, position);
+          roadviewContainer.style.display = 'inline-block';
+      });
+    }
+</script>
+</body>
+</html>

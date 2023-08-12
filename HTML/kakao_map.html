@@ -1,0 +1,74 @@
+<div id='map' style='width:800px;height:600px;display:inline-block;'></div>
+<script type='text/javascript' src='//dapi.kakao.com/v2/maps/sdk.js?appkey=4f4f0002f704a308f73391878f370e5f'></script>
+<script>
+    var container = document.getElementById('map');
+    var options = {
+           center: new kakao.maps.LatLng(37.4706092043945, 126.936970450155),
+           level:3
+    };
+    function initializeMap() {
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(37.47538611, 126.9538444),
+                level: 3
+            };
+            var map = new kakao.maps.Map(container, options);
+
+            var markerPosition = new kakao.maps.LatLng(37.47538611, 126.9538444);
+            var marker = new kakao.maps.Marker({ position: markerPosition });
+            marker.setMap(map);
+    }
+    function panTo(lat,lng,dong) {
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(lat,lng),
+                level: 3
+            };
+
+            var map = new kakao.maps.Map(container, options);
+
+            var content = '<div class ="label"' +
+            'style="background-color: white; color: black; border: 1px solid #0080ff; padding: 10px; border-radius: 20px; font-size: 12px;">' +
+            '<span class="left"></span>' +
+            '<span class="center">' + dong + '</span>' +
+            '<span class="right"></span>' +
+            '</div>';
+
+            var position = new kakao.maps.LatLng(lat,lng);
+
+            var customOverlay = new kakao.maps.CustomOverlay({
+                position: position,
+                content: content
+            });
+
+            customOverlay.setMap(map);
+    }
+    function getParameterByName(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[[]]/g, '\\$&');
+      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+      const match = regex.exec(url);
+
+      if (match) {
+        const encodedValue = match[2];
+        const decodedValue = decodeURIComponent(encodedValue.replace(/\+/g, ' '));
+        return decodedValue;
+      }
+      return null;
+    }
+    var message = getParameterByName("message");
+    if (message) {
+        var parts = message.split(",");
+        var funcName = parts[0];
+
+        if (funcName === "initializeMap") {
+            initializeMap();
+        } else if (funcName === "focus_marker") {
+            var coordinates = parts[1].split(":");
+            var lat = parseFloat(coordinates[0]);  // 문자열을 숫자로 변환
+            var lng = parseFloat(coordinates[1]);  // 문자열을 숫자로 변환
+            var dong = coordinates[2];
+            panTo(lat, lng, dong);
+        }
+    }
+</script>

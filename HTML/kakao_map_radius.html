@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        html, body {width:800px;height:600px;margin:0;padding:0;}
+        .radius_border{border:1px solid #919191;border-radius:5px;}
+        .custom_typecontrol {position:absolute;top:10px;right:330px;overflow:hidden;width:130px;height:30px;margin:0;padding:0;z-index:1;font-size:12px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+        .custom_typecontrol span {display:block;width:65px;height:30px;float:left;text-align:center;line-height:30px;cursor:pointer;}
+        .custom_typecontrol .btn {background:#fff;background:linear-gradient(#fff,  #e6e6e6);}
+        .custom_typecontrol .btn:hover {background:#f5f5f5;background:linear-gradient(#f5f5f5,#e3e3e3);}
+        .custom_typecontrol .btn:active {background:#e6e6e6;background:linear-gradient(#e6e6e6, #fff);}
+        .custom_typecontrol .selected_btn {color:#fff;background:#425470;background:linear-gradient(#425470, #5b6d8a);}
+        .custom_typecontrol .selected_btn:hover {color:#fff;}
+        .title {font-weight:bold;display:block;font-size:14px;font-family:'Malgun Gothic', '맑은 고딕', sans-serif;}
+        .hAddr {position:absolute;right:10px;bottom:20px;width:374px;border-radius: 2px;background:rgba(255,255,255,255);z-index:10;padding:5px;}
+        #centerAddr {display:block;margin-top:2px;font-weight: normal;}
+        .bAddr .title {position:absolute;right:-6px;bottom:10px;border-radius: 2px;z-index:1;width:400px;height:136px;background: url('https://ifh.cc/g/9lsq57.png') no-repeat;margin-bottom:8px;}
+        #centerBAddr {display:block;margin-top:2px;font-weight: normal;}
+    </style>
+</head>
+<body>
+    <div id="map" style='width:800px;height:600px;display:inline-block;'></div>
+    <!-- 지도타입 컨트롤 div 입니다 -->
+    <div class="custom_typecontrol radius_border">
+        <span id="btnRoadmap" class="selected_btn" onclick="setOverlayMapTypeId('roadmap')">지도</span>
+        <span id="btnDistrict" class="btn" onclick="setOverlayMapTypeId('use_district')">지적편집도</span>
+    </div>
+    <div class="hAddr">
+        <span class="title">지적편집도(용도지역)</span>
+        <span id="centerAddr"></span>
+    </div>
+    <div class="bAddr">
+        <span class="title"></span>
+        <span id="centerBAddr"></span>
+    </div>
+<script type='text/javascript' src='//dapi.kakao.com/v2/maps/sdk.js?appkey=4f4f0002f704a308f73391878f370e5f&libraries=services'></script>
+<script>
+    var mapContainer = document.getElementById('map');
+    var mapOption = {
+            center: new kakao.maps.LatLng(37.486788, 126.938004),
+            level: 3 // 지도의 확대 레벨
+    };
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    var Markers = [];
+    var markerPosition  = new kakao.maps.LatLng(37.486788, 126.938004);
+    var marker = new kakao.maps.Marker({position: markerPosition, zIndex:1000}); 
+    marker.setMap(map); 
+    var Positions =[{'apart': '미용실', 'distance': 126.9379762, 'lat': 2.6099496487762295, 'lng': 37.48678011}, {'apart': '미용실', 'distance': 126.937978, 'lat': 15.052236109630984, 'lng': 37.48665397}, {'apart': '미용실', 'distance': 126.9380755, 'lat': 19.2899528871155, 'lng': 37.4869522}, {'apart': '편의점', 'distance': 126.9378603, 'lat': 24.553669066731977, 'lng': 37.48697729}, {'apart': '미용실', 'distance': 126.9383157, 'lat': 27.79307285742585, 'lng': 37.48675613}, {'apart': '미용실', 'distance': 126.9379799, 'lat': 29.950251795840895, 'lng': 37.48651883}, {'apart': '카페', 'distance': 126.9376798, 'lat': 33.76366910833193, 'lng': 37.48694864}, {'apart': '카페', 'distance': 126.9379137, 'lat': 43.67712537250393, 'lng': 37.4864011}, {'apart': '미용실', 'distance': 126.9379137, 'lat': 43.67712537250393, 'lng': 37.4864011}, {'apart': 'PC방', 'distance': 126.9382529, 'lat': 47.95338736133644, 'lng': 37.48640415}, {'apart': '미용실', 'distance': 126.9375518, 'lat': 58.213982252720044, 'lng': 37.48640686}, {'apart': 'PC방', 'distance': 126.9385471, 'lat': 65.34849585687637, 'lng': 37.48638877}, {'apart': '편의점', 'distance': 126.9379293, 'lat': 77.20922029944441, 'lng': 37.48609489}, {'apart': '미용실', 'distance': 126.9388795, 'lat': 77.95431227754203, 'lng': 37.48686932}, {'apart': '미용실', 'distance': 126.9389549, 'lat': 97.79018159345026, 'lng': 37.48633837}, {'apart': '미용실', 'distance': 126.9383615, 'lat': 101.54424202005563, 'lng': 37.48591856}, {'apart': '미용실', 'distance': 126.9383615, 'lat': 101.54424202005563, 'lng': 37.48591856}, {'apart': '카페', 'distance': 126.9383615, 'lat': 101.54424202005563, 'lng': 37.48591856}, {'apart': '목욕탕/사우나', 'distance': 126.9383615, 'lat': 101.54424202005563, 'lng': 37.48591856}, {'apart': '미용실', 'distance': 126.9392141, 'lat': 115.57946127425211, 'lng': 37.48639477}, {'apart': '편의점', 'distance': 126.9369597, 'lat': 120.96140240058692, 'lng': 37.4874918}, {'apart': '셀프 빨래방', 'distance': 126.9393649, 'lat': 121.35441120766922, 'lng': 37.48692774}, {'apart': '미용실', 'distance': 126.9380265, 'lat': 129.84758059935965, 'lng': 37.4856182}, {'apart': '카페', 'distance': 126.9367417, 'lat': 133.99963822173714, 'lng': 37.48612025}, {'apart': '카페', 'distance': 126.9392082, 'lat': 136.67021197240206, 'lng': 37.48601627}, {'apart': '미용실', 'distance': 126.9392082, 'lat': 136.67021197240206, 'lng': 37.48601627}, {'apart': '미용실', 'distance': 126.9364793, 'lat': 138.73779710186363, 'lng': 37.48708201}, {'apart': '카페', 'distance': 126.9395541, 'lat': 145.68978931097695, 'lng': 37.48634375}, {'apart': 'PC방', 'distance': 126.9395541, 'lat': 145.68978931097695, 'lng': 37.48634375}, {'apart': '세탁소', 'distance': 126.9363571, 'lat': 146.47665942016022, 'lng': 37.48692773}, {'apart': '미용실', 'distance': 126.9363522, 'lat': 150.10547943851952, 'lng': 37.48647716}, {'apart': '카페', 'distance': 126.9363522, 'lat': 150.10547943851952, 'lng': 37.48647716}, {'apart': '카페', 'distance': 126.9378613, 'lat': 164.48339715579334, 'lng': 37.48531036}, {'apart': '카페', 'distance': 126.9399093, 'lat': 168.53426687852482, 'lng': 37.48681549}, {'apart': '미용실', 'distance': 126.939091, 'lat': 171.29284155979957, 'lng': 37.48551063}, {'apart': '미용실', 'distance': 126.939787, 'lat': 174.58789972930018, 'lng': 37.48746315}, {'apart': '미용실', 'distance': 126.9400588, 'lat': 195.5458945854645, 'lng': 37.48743855}, {'apart': '미용실', 'distance': 126.9399198, 'lat': 195.76738772309167, 'lng': 37.48767158}, {'apart': '카페', 'distance': 126.9399198, 'lat': 195.76738772309167, 'lng': 37.48767158}, {'apart': '미용실', 'distance': 126.9402267, 'lat': 196.6114831881822, 'lng': 37.48675526}, {'apart': '미용실', 'distance': 126.9373224, 'lat': 203.6634846374432, 'lng': 37.4850352}, {'apart': '카페', 'distance': 126.9373224, 'lat': 203.6634846374432, 'lng': 37.4850352}, {'apart': '카페', 'distance': 126.9360066, 'lat': 205.07398833741365, 'lng': 37.48772651}, {'apart': '카페', 'distance': 126.9402673, 'lat': 207.74643503848398, 'lng': 37.48628708}, {'apart': '미용실', 'distance': 126.9356168, 'lat': 213.42465537936252, 'lng': 37.48650658}, {'apart': '서점', 'distance': 126.9356168, 'lat': 213.42465537936252, 'lng': 37.48650658}, {'apart': '미용실', 'distance': 126.9357058, 'lat': 214.60184663544294, 'lng': 37.48740843}, {'apart': '세탁소', 'distance': 126.9361266, 'lat': 216.0803277272011, 'lng': 37.48803394}, {'apart': '편의점', 'distance': 126.9402144, 'lat': 216.63744755596164, 'lng': 37.48762917}, {'apart': '기숙사/고시원', 'distance': 126.936071, 'lat': 217.7004229922319, 'lng': 37.48557358}, {'apart': '미용실', 'distance': 126.9404031, 'lat': 219.56300511275128, 'lng': 37.48627929}, {'apart': '미용실', 'distance': 126.9374044, 'lat': 222.8576685171658, 'lng': 37.48483771}, {'apart': '미용실', 'distance': 126.935517, 'lat': 223.86466777871175, 'lng': 37.48716345}, {'apart': '카페', 'distance': 126.9356234, 'lat': 230.4823116119711, 'lng': 37.48763295}, {'apart': '카페', 'distance': 126.9355571, 'lat': 231.31809752320382, 'lng': 37.48752423}, {'apart': '미용실', 'distance': 126.9405498, 'lat': 231.61252331460912, 'lng': 37.48629862}, {'apart': '셀프 빨래방', 'distance': 126.9354909, 'lat': 232.6190718810633, 'lng': 37.48740649}, {'apart': '카페', 'distance': 126.9353678, 'lat': 235.0053301113532, 'lng': 37.48652236}, {'apart': '미용실', 'distance': 126.9353678, 'lat': 235.0053301113532, 'lng': 37.48652236}, {'apart': '카페', 'distance': 126.9373608, 'lat': 236.4457132210123, 'lng': 37.48472018}, {'apart': '미용실', 'distance': 126.9404048, 'lat': 238.01262908476096, 'lng': 37.48775703}, {'apart': '미용실', 'distance': 126.9353582, 'lat': 238.3813950105107, 'lng': 37.48719806}, {'apart': '세탁소', 'distance': 126.9402775, 'lat': 239.66471647028052, 'lng': 37.48796313}, {'apart': '미용실', 'distance': 126.9407918, 'lat': 262.49552854266665, 'lng': 37.48597642}, {'apart': '카페', 'distance': 126.9407918, 'lat': 262.49552854266665, 'lng': 37.48597642}, {'apart': '미용실', 'distance': 126.9349921, 'lat': 266.55801472415817, 'lng': 37.48669918}, {'apart': '카페', 'distance': 126.9349921, 'lat': 266.55801472415817, 'lng': 37.48669918}, {'apart': '셀프 빨래방', 'distance': 126.9406393, 'lat': 267.2535465147356, 'lng': 37.48796637}, {'apart': '카페', 'distance': 126.9356592, 'lat': 278.7043442510156, 'lng': 37.48511033}, {'apart': '편의점', 'distance': 126.9361715, 'lat': 280.8176519007155, 'lng': 37.4888543}, {'apart': '편의점', 'distance': 126.9355117, 'lat': 286.07112435930685, 'lng': 37.48514505}, {'apart': '편의점', 'distance': 126.9399726, 'lat': 286.7932644428414, 'lng': 37.48473463}, {'apart': '카페', 'distance': 126.9411833, 'lat': 286.83818094793054, 'lng': 37.48627727}, {'apart': '헬스장', 'distance': 126.9411833, 'lat': 286.83818094793054, 'lng': 37.48627727}, {'apart': '미용실', 'distance': 126.9412566, 'lat': 287.85902179158643, 'lng': 37.48669241}, {'apart': '카페', 'distance': 126.9408404, 'lat': 292.27029107430286, 'lng': 37.48813937}, {'apart': '카페', 'distance': 126.9401549, 'lat': 305.2424063870079, 'lng': 37.48463715}, {'apart': '셀프 빨래방', 'distance': 126.94087, 'lat': 306.3226839610856, 'lng': 37.48523826}, {'apart': '기숙사/고시원', 'distance': 126.9360298, 'lat': 308.9095467395745, 'lng': 37.48449195}, {'apart': '편의점', 'distance': 126.9370761, 'lat': 312.74772515311116, 'lng': 37.48406886}, {'apart': '미용실', 'distance': 126.9408051, 'lat': 315.31539139504315, 'lng': 37.48503043}, {'apart': '미용실', 'distance': 126.9408051, 'lat': 315.31539139504315, 'lng': 37.48503043}, {'apart': '미용실', 'distance': 126.9410645, 'lat': 317.6287281014664, 'lng': 37.48828555}, {'apart': '미용실', 'distance': 126.9399668, 'lat': 321.7528522734016, 'lng': 37.48434712}, {'apart': '헬스장', 'distance': 126.9379747, 'lat': 343.90334519191117, 'lng': 37.48368949}, {'apart': '편의점', 'distance': 126.9343862, 'lat': 347.0728969734532, 'lng': 37.48557641}, {'apart': '카페', 'distance': 126.9391272, 'lat': 352.04986895481596, 'lng': 37.4837449}, {'apart': '카페', 'distance': 126.9418337, 'lat': 354.03092616746153, 'lng': 37.48585961}, {'apart': '서점', 'distance': 126.9416162, 'lat': 362.4786558972373, 'lng': 37.48524494}, {'apart': '편의점', 'distance': 126.9339235, 'lat': 362.58323860909684, 'lng': 37.48710402}, {'apart': '기숙사/고시원', 'distance': 126.9339061, 'lat': 374.40349312748657, 'lng': 37.48594151}, {'apart': '미용실', 'distance': 126.9422217, 'lat': 375.33680115903684, 'lng': 37.48641272}, {'apart': '카페', 'distance': 126.9422217, 'lat': 375.33680115903684, 'lng': 37.48641272}, {'apart': '헬스장', 'distance': 126.9339903, 'lat': 379.3811900955371, 'lng': 37.48558185}, {'apart': '카페', 'distance': 126.9339903, 'lat': 379.3811900955371, 'lng': 37.48558185}, {'apart': '세탁소', 'distance': 126.9368589, 'lat': 385.5481110146966, 'lng': 37.48343617}, {'apart': '미용실', 'distance': 126.9380253, 'lat': 385.8500531278758, 'lng': 37.4833115}, {'apart': '미용실', 'distance': 126.9339716, 'lat': 392.4868276170475, 'lng': 37.48531137}, {'apart': '카페', 'distance': 126.9339716, 'lat': 392.4868276170475, 'lng': 37.48531137}, {'apart': '세탁소', 'distance': 126.9372118, 'lat': 396.89116643281716, 'lng': 37.48326814}, {'apart': '편의점', 'distance': 126.9378459, 'lat': 398.2706745282859, 'lng': 37.48320176}, {'apart': '셀프 빨래방', 'distance': 126.933564, 'lat': 399.09863815132195, 'lng': 37.48614567}, {'apart': '미용실', 'distance': 126.9416779, 'lat': 399.7225837994772, 'lng': 37.48888574}, {'apart': '편의점', 'distance': 126.9418159, 'lat': 399.82443329107883, 'lng': 37.48872479}, {'apart': '편의점', 'distance': 126.9418159, 'lat': 399.82443329107883, 'lng': 37.48872479}, {'apart': '편의점', 'distance': 126.9349154, 'lat': 401.27730350924685, 'lng': 37.48413951}, {'apart': '미용실', 'distance': 126.9379597, 'lat': 403.93087522805024, 'lng': 37.48314872}, {'apart': '세탁소', 'distance': 126.9337316, 'lat': 404.4126430474647, 'lng': 37.48548941}, {'apart': '카페', 'distance': 126.9425098, 'lat': 407.3323388130934, 'lng': 37.48602785}, {'apart': '세탁소', 'distance': 126.9335575, 'lat': 408.1619207697424, 'lng': 37.48580321}, {'apart': '미용실', 'distance': 126.9425215, 'lat': 408.97276789290487, 'lng': 37.48600092}, {'apart': '카페', 'distance': 126.934299, 'lat': 411.2867960506513, 'lng': 37.48454843}, {'apart': '편의점', 'distance': 126.9340694, 'lat': 411.81024376873614, 'lng': 37.48877228}, {'apart': '미용실', 'distance': 126.938119, 'lat': 411.87868503188014, 'lng': 37.48307807}, {'apart': 'PC방', 'distance': 126.933389, 'lat': 412.33059522268286, 'lng': 37.48731545}, {'apart': '편의점', 'distance': 126.9391467, 'lat': 414.245143450109, 'lng': 37.4831684}, {'apart': '편의점', 'distance': 126.9391467, 'lat': 414.245143450109, 'lng': 37.4831684}, {'apart': '미용실', 'distance': 126.9413378, 'lat': 416.05629222243, 'lng': 37.48414317}, {'apart': 'PC방', 'distance': 126.9413378, 'lat': 416.05629222243, 'lng': 37.48414317}, {'apart': '편의점', 'distance': 126.9413378, 'lat': 416.05629222243, 'lng': 37.48414317}, {'apart': '카페', 'distance': 126.9425913, 'lat': 418.6491347359178, 'lng': 37.48585738}, {'apart': '미용실', 'distance': 126.9425913, 'lat': 418.6491347359178, 'lng': 37.48585738}, {'apart': '카페', 'distance': 126.938696, 'lat': 418.6756582155687, 'lng': 37.48305622}, {'apart': '기숙사/고시원', 'distance': 126.9337501, 'lat': 426.1319633419783, 'lng': 37.48498499}, {'apart': '미용실', 'distance': 126.9411386, 'lat': 429.2698113385054, 'lng': 37.48383502}, {'apart': '카페', 'distance': 126.9331955, 'lat': 430.7240700855431, 'lng': 37.48740381}, {'apart': '기숙사/고시원', 'distance': 126.9331174, 'lat': 433.06568920336446, 'lng': 37.4865381}, {'apart': '카페', 'distance': 126.9333588, 'lat': 436.16875608267145, 'lng': 37.48546803}, {'apart': '미용실', 'distance': 126.9333588, 'lat': 436.16875608267145, 'lng': 37.48546803}, {'apart': '미용실', 'distance': 126.9402535, 'lat': 439.2629898653264, 'lng': 37.48325943}, {'apart': '미용실', 'distance': 126.9386198, 'lat': 440.633365540915, 'lng': 37.4828483}, {'apart': '편의점', 'distance': 126.9386198, 'lat': 440.633365540915, 'lng': 37.4828483}, {'apart': '카페', 'distance': 126.9335693, 'lat': 440.8515183152445, 'lng': 37.48497435}, {'apart': '카페', 'distance': 126.9415436, 'lat': 441.5117385391705, 'lng': 37.48398282}, {'apart': '미용실', 'distance': 126.9415436, 'lat': 441.5117385391705, 'lng': 37.48398282}, {'apart': '카페', 'distance': 126.9338927, 'lat': 443.5258879958352, 'lng': 37.48449971}, {'apart': '편의점', 'distance': 126.9338927, 'lat': 443.5258879958352, 'lng': 37.48449971}, {'apart': '미용실', 'distance': 126.9341681, 'lat': 443.5279390109877, 'lng': 37.48421386}, {'apart': '편의점', 'distance': 126.9333505, 'lat': 445.4869883933751, 'lng': 37.4852517}, {'apart': '미용실', 'distance': 126.9329909, 'lat': 450.0227762996694, 'lng': 37.48748306}, {'apart': '카페', 'distance': 126.9341812, 'lat': 451.79698885701487, 'lng': 37.48408783}, {'apart': '미용실', 'distance': 126.9413889, 'lat': 452.6344391817994, 'lng': 37.48372914}, {'apart': '카페', 'distance': 126.9404693, 'lat': 455.0489008426565, 'lng': 37.48318928}, {'apart': '미용실', 'distance': 126.9330878, 'lat': 459.86997046598105, 'lng': 37.48543855}, {'apart': '편의점', 'distance': 126.9430594, 'lat': 468.1644051769107, 'lng': 37.48553719}, {'apart': '편의점', 'distance': 126.9430594, 'lat': 468.1644051769107, 'lng': 37.48553719}, {'apart': '편의점', 'distance': 126.9430594, 'lat': 468.1644051769107, 'lng': 37.48553719}, {'apart': '카페', 'distance': 126.9410553, 'lat': 469.2021826729552, 'lng': 37.48332969}, {'apart': '카페', 'distance': 126.9419174, 'lat': 469.3194320800637, 'lng': 37.48393211}, {'apart': '미용실', 'distance': 126.9419174, 'lat': 469.3194320800637, 'lng': 37.48393211}, {'apart': '미용실', 'distance': 126.9392796, 'lat': 481.98791677527595, 'lng': 37.48256589}, {'apart': '헬스장', 'distance': 126.9412032, 'lat': 482.3795005929002, 'lng': 37.48326794}, {'apart': '세탁소', 'distance': 126.9326763, 'lat': 485.0643146157918, 'lng': 37.4857502}, {'apart': '카페', 'distance': 126.932604, 'lat': 487.0836647364144, 'lng': 37.48765076}, {'apart': '카페', 'distance': 126.9408673, 'lat': 487.88496039949615, 'lng': 37.48303066}, {'apart': '편의점', 'distance': 126.9408673, 'lat': 487.88496039949615, 'lng': 37.48303066}, {'apart': '세탁소', 'distance': 126.9420262, 'lat': 492.1931654619574, 'lng': 37.48985298}];
+
+    var img_cafe = 'https://ifh.cc/g/wgM81M.png';
+    var img_book = 'https://ifh.cc/g/LNQckq.png';
+    var img_pc = 'https://ifh.cc/g/nmpqRF.png';
+    var img_hair = 'https://ifh.cc/g/wsYpPt.png';
+    var img_convi = 'https://ifh.cc/g/OYAHgk.png';
+    var img_tel = 'https://ifh.cc/g/3PYmHW.png';
+    var img_sauna = 'https://ifh.cc/g/RxqXqY.png';
+    var img_gym = 'https://ifh.cc/g/aoSTlK.png';
+    var img_self_laundry = 'https://ifh.cc/g/VBcQrN.png';
+    var img_laundry = 'https://ifh.cc/g/7sq2oA.png';
+
+    var imgSize = new kakao.maps.Size(40, 40);
+    var imgDefault = markerImg_cafe;
+    var markerImg_cafe = new kakao.maps.MarkerImage(img_cafe, imgSize);
+    var markerImg_book = new kakao.maps.MarkerImage(img_book, imgSize);
+    var markerImg_pc = new kakao.maps.MarkerImage(img_pc, imgSize);
+    var markerImg_hair = new kakao.maps.MarkerImage(img_hair, imgSize);
+    var markerImg_convi = new kakao.maps.MarkerImage(img_convi, imgSize);
+    var markerImg_tel = new kakao.maps.MarkerImage(img_tel, imgSize);
+    var markerImg_sauna = new kakao.maps.MarkerImage(img_sauna, imgSize);
+    var markerImg_gym = new kakao.maps.MarkerImage(img_gym, imgSize);
+    var markerImg_self_laundry = new kakao.maps.MarkerImage(img_self_laundry, imgSize);
+    var markerImg_laundry = new kakao.maps.MarkerImage(img_laundry, imgSize);
+
+    for (var i = 0; i < Positions.length; i ++) {
+        (function(index) {
+            var curPosition = Positions[i];
+            if (curPosition.apart === '카페') {
+                imgDefault = markerImg_cafe;
+            }
+            else if (curPosition.apart === '서점') {
+                imgDefault = markerImg_book;
+            }
+            else if (curPosition.apart === 'PC방') {
+                imgDefault = markerImg_pc;
+            }
+            else if (curPosition.apart === '미용실') {
+                imgDefault = markerImg_hair;
+            }
+            else if (curPosition.apart === '편의점') {
+                imgDefault = markerImg_convi;
+            }
+            else if (curPosition.apart === '기숙사/고시원') {
+                imgDefault = markerImg_tel;
+            }
+            else if (curPosition.apart === '목욕탕/사우나') {
+                imgDefault = markerImg_sauna;
+            }
+            else if (curPosition.apart === '헬스장') {
+                imgDefault = markerImg_gym;
+            }
+            else if (curPosition.apart === '셀프 빨래방') {
+                imgDefault = markerImg_self_laundry;
+            }
+            else if (curPosition.apart === '세탁소') {
+                imgDefault = markerImg_laundry;
+            }
+            var Marker = new kakao.maps.Marker({
+                map : map,
+                position: new kakao.maps.LatLng(curPosition.lng, curPosition.distance),
+                image : imgDefault
+            });
+            Markers.push(Marker);
+        })(i);
+    }
+
+    var currentTypeId;
+
+    // 지도타입 컨트롤버튼을 클릭하면 호출되어 지도타입을 바꾸는 함수
+    function setOverlayMapTypeId(maptype) {
+        var changeMaptype;
+        var districtControl = document.getElementById('btnDistrict');
+        var roadmapControl = document.getElementById('btnRoadmap');
+        if (maptype === 'use_district') {
+            changeMaptype = kakao.maps.MapTypeId.USE_DISTRICT;
+            roadmapControl.className = 'btn';
+            districtControl.className = 'selected_btn';
+            map.addOverlayMapTypeId(changeMaptype);
+            currentTypeId = changeMaptype;
+        } else if (maptype === 'roadmap') {
+            map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);
+            districtControl.className = 'btn';
+            roadmapControl.className = 'selected_btn';
+            if (currentTypeId) {
+                map.removeOverlayMapTypeId(currentTypeId);
+            }
+        }
+    }
+        var circle = new kakao.maps.Circle({
+        center: new kakao.maps.LatLng(37.486788, 126.938004),  
+        radius: 500,
+        strokeWeight: 2,
+        strokeColor: '#00a0e9',
+        strokeOpacity: 0.8,
+        fillColor: '#00a0e9',
+        fillOpacity: 0.5
+    });
+    circle.setMap(map);
+</script>
+</body>
+</html>
